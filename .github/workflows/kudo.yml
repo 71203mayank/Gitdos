@@ -1,0 +1,23 @@
+name: Send Kudo
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  kudo:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send PR Data to Backend
+        run: |
+          curl -X POST "${{ secrets.KUDO_API_URL }}" \
+          -H "Authorization: Bearer ${{ secrets.GITDOS_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repo_path": "${{ github.repository }}",
+            "username": "${{ github.event.pull_request.user.login }}",
+            "pr_title": "${{ github.event.pull_request.title }}",
+            "pr_url": "${{ github.event.pull_request.html_url }}"
+          }'
