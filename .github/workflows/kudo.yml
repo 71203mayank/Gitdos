@@ -13,7 +13,7 @@ jobs:
       - name: Send PR Data to Backend
         run: |
           curl -X POST "${{ secrets.KUDO_API_URL }}" \
-          -H "Authorization: Bearer ${{ secrets.GITDOS_API_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.KUDO_API_KEY }}" \
           -H "Content-Type: application/json" \
           -d '{
             "repo_path": "${{ github.repository }}",
