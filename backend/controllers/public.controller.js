@@ -33,7 +33,6 @@ async function generateKey(req, res){
 }
 
 async function postKudo(req, res){
-    console.log('[INFO] Received request to post kudo with body:', req.body);
     try{
         const authHeader = req.headers['authorization'];
         const api_key = authHeader && authHeader.split(' ')[1]; // Extract API key from the Authorization header
