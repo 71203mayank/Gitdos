@@ -3,6 +3,8 @@ name: Send Kudo
 on:
   pull_request:
     types: [closed]
+    branches:
+      - master   # Only PRs targeting master
 
 jobs:
   kudo:
