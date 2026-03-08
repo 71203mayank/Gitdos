@@ -1,10 +1,27 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import type {Gitdo} from "../../types";
-import {DUMMY_GITDOS } from "../../constants";
 import GitdoCard from "../../components/gitdoCard";
+
+//ts-ignore
+import {db} from "../../config/firestoreConfig.js"
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 const Home = () => {
-    const [gitdos, setGitdos] = useState<Gitdo[]>(DUMMY_GITDOS);
+    const [gitdos, setGitdos] = useState<Gitdo[]>([]);
     // TODO: replace DUMMY_GITDOS with real data from backend
+
+    useEffect(() => {
+        const q = query(collection(db, "kudos"), orderBy("timestamp", "desc"));
+
+        // This is the magic listener
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const kudosData = snapshot.docs.map(doc => ({
+            ...doc.data()
+            }));
+            setGitdos(kudosData as Gitdo[]); // React updates the UI automatically!
+        });
+
+        return () => unsubscribe(); // Cleanup on unmount
+    },[])
 
     
     return (
@@ -21,7 +38,7 @@ const Home = () => {
             </div>
 
             {/* list */}
-            <div className="flex-1 min-h-0 w-full overflow-y-auto grid [grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))] gap-4">
+            <div className="flex-1 min-h-0 w-full overflow-y-auto grid [grid-template-columns:repeat(auto-fit,18rem))] [grid-template-rows:repeat(auto-fit,18rem)] gap-4">
             {gitdos.map((gitdo, index) => (
                 <GitdoCard key={index} gitdo={gitdo} />
             ))}

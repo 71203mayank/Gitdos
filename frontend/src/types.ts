@@ -1,4 +1,5 @@
 export type Gitdo = {
+    id?: string;
     recipient_username: string;
     repo_path: string;
     pr_title: string;
